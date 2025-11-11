@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/table';
 import { ImageCell } from '@/app/(protected)/attendance/ImageCell';
 import FilteringForm from './FilteringForm';
+import { Card, CardContent } from '@/components/ui/card';
+import Score from './Score';
 
 interface Employee {
     id: string;
@@ -84,7 +86,33 @@ export default async function  AttendancePage({ searchParams }: { searchParams: 
                     </div>
                     
                     <div className="space-y-4 mt-4">
-                        <Table>
+                        <h3 className="text-lg font-semibold">ผู้มาปฏิบัติงาน</h3>
+
+                        <hr />
+
+                        <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 gap-4">
+                            {attendances && attendances.map((att: Attendance, index: number) => (
+                                <Card className='p-0'>
+                                    <CardContent className='p-0'>
+                                        <div className="flex flex-col justify-center items-center gap-2 pb-4">
+                                            <div className="rounded-tl-md rounded-tr-md bg-gray-100 overflow-hidden mb-4">
+                                                <div className="flex items-center justify-center object-contain text-muted-foreground text-xs">
+                                                    <img src={att.check_in_image} />
+                                                </div>
+                                            </div>
+
+                                            <p>{`${att.employee?.prefix}${att.employee?.firstname} ${att.employee?.lastname}`}</p>
+                                            <p><span>เวลา :</span> {moment(att.check_in_time).format('HH:mm')}</p>
+                                            <div className="flex flex-row items-center gap-2">
+                                                <span>คะแนน :</span> <Score value={att.check_in_score} />
+                                            </div>
+                                        </div>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+
+                        {/* <Table>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead className="w-[5%] text-center">ลำดับ</TableHead>
@@ -115,7 +143,15 @@ export default async function  AttendancePage({ searchParams }: { searchParams: 
                                     <TableCell className="text-center">{attendances && attendances.length} ราย</TableCell>
                                 </TableRow>
                             </TableFooter>
-                        </Table>
+                        </Table> */}
+
+                        <h3 className="text-lg font-semibold">ผู้ไม่มาปฏิบัติงาน/ไปราชการ</h3>
+
+                        <hr />
+
+                        <div className="grid grid-cols-4 max-md:grid-cols-2 max-sm:grid-cols-1 gap-4">
+                            
+                        </div>
                     </div>
                 </div>
             </div>
