@@ -37,7 +37,7 @@ const getAttendances = async (date: string = moment().format('YYYY-MM-DD')): Pro
     return res.json();
 };
 
-export default async function  CheckInPage({ searchParams }: { searchParams: { date: string }}) {
+export default async function  AttendancePage({ searchParams }: { searchParams: { date: string }}) {
     const { date } = await searchParams;
 
     const { data: attendances } = await getAttendances(date);
@@ -95,7 +95,7 @@ export default async function  CheckInPage({ searchParams }: { searchParams: { d
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {attendances.map((att: Attendance, index: number) => (
+                                {attendances && attendances.map((att: Attendance, index: number) => (
                                     <TableRow key={att.id}>
                                         <TableCell className="text-center">{index+1}</TableCell>
                                         <TableCell>
@@ -112,7 +112,7 @@ export default async function  CheckInPage({ searchParams }: { searchParams: { d
                             <TableFooter>
                                 <TableRow>
                                     <TableCell className="text-right" colSpan={4}>Total</TableCell>
-                                    <TableCell className="text-center">{attendances.length} ราย</TableCell>
+                                    <TableCell className="text-center">{attendances && attendances.length} ราย</TableCell>
                                 </TableRow>
                             </TableFooter>
                         </Table>
