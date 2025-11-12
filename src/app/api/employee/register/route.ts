@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import moment from 'moment';
 
 export async function POST(request: NextRequest) {
     try {
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
                 firstname,
                 lastname,
                 sex: parseInt(sex),
-                birthdate: birthdate ? birthdate : new Date(),
+                birthdate: birthdate ? moment(`${birthdate} 08:30:00`).toDate() : moment().toDate(),
                 cid,
                 email,
                 position_id: parseInt(position_id),

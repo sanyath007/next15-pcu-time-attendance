@@ -48,7 +48,7 @@ model Employee {
   prefix            String
   firstname         String
   lastname          String
-  sex               Int
+  sex               String
   birthdate         DateTime?
   position_id       Int?
   position_level    String?

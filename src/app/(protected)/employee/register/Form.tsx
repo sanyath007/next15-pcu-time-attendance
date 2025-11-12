@@ -457,6 +457,13 @@ export default function EmployeeRegistrationForm() {
                                 }`}
                             >
                                 <option value="1">นักวิชาการคอมพิวเตอร์</option>
+                                <option value="2">นักวิชาการสาธารณสุข</option>
+                                <option value="3">นักจิตวิทยา</option>
+                                <option value="4">นักสังคมสงเคราะห์</option>
+                                <option value="5">นักจัดการงานทั่วไป</option>
+                                <option value="6">นักทรัพยากรบุคคล</option>
+                                <option value="7">นักวิชาการการเงินและบัญชี</option>
+                                <option value="8">นักวิชาการพัสดุ</option>
                             </select>
                             {errors.position_id && <p className="text-red-500 text-sm mt-1">{errors.position_id}</p>}
                         </div>
