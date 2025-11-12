@@ -1,13 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client"
+  provider      = "prisma-client"
+  output        = "../src/generated/prisma"
   binaryTargets = ["native", "windows"]
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -16,68 +10,56 @@ datasource db {
 }
 
 model User {
-  id                String   @id @default(cuid())
-  username          String   @unique
-  email             String   @unique
-  password          String   // Hashed password
-  name              String
-  role              String   @default("user") // user, admin, manager
-  is_active         Boolean  @default(true)
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  
-  // Optional fields for additional user info
-  // department_id  String?
-  // subdept_id     String?
-  // lineUserId     String?
-  // lineDisplayName String?
-  // linePictureUrl String?
-  email_verified    DateTime?
-  avatar_image      String?
-
-  // Relations
-  employees         Employee[]
-  accounts          Account[]
+  id             String     @id @default(cuid())
+  username       String     @unique
+  email          String     @unique
+  password       String
+  name           String
+  role           String     @default("user")
+  is_active      Boolean    @default(true)
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  email_verified DateTime?
+  avatar_image   String?
+  accounts       Account[]
+  employees      Employee[]
 
   @@map("users")
 }
 
 model Employee {
-  id                String  @id @default(cuid())
-  cid               String  @unique
-  prefix            String
-  firstname         String
-  lastname          String
-  sex               String
-  birthdate         DateTime?
-  position_id       Int?
-  position_level    String?
-  email             String? @unique
-  face_descriptor   Json?   // Store the 128D face descriptor
-  profile_image     String? // Base64 or URL
-  user_id           String? // Link to User if needed
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-
-  // Relations
-  user            User?    @relation(fields: [user_id], references: [id])
+  id              String       @id @default(cuid())
+  cid             String       @unique
+  prefix          String
+  firstname       String
+  lastname        String
+  sex             String
+  birthdate       DateTime?
+  position_id     Int?
+  position_level  String?
+  email           String?      @unique
+  face_descriptor Json?
+  profile_image   String?
+  user_id         String?
+  created_at      DateTime     @default(now())
+  updated_at      DateTime     @updatedAt
   attendances     Attendance[]
-  
+  user            User?        @relation(fields: [user_id], references: [id])
+
+  @@index([user_id], map: "employees_user_id_fkey")
   @@map("employees")
 }
 
 model Attendance {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   employee_id     String?
-  check_in_time   DateTime @default(now())
-  check_in_image  String?  @db.Text  // Captured photo
+  check_in_time   DateTime  @default(now())
+  check_in_image  String?   @db.Text
   check_in_score  Int?
   check_out_time  DateTime?
-  check_out_image String?  @db.Text  // Captured photo
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
-  
-  // Relations
+  check_out_image String?   @db.Text
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
   employee        Employee? @relation(fields: [employee_id], references: [id])
 
   @@index([employee_id, check_in_time])
@@ -85,29 +67,28 @@ model Attendance {
 }
 
 model Position {
-  id              Int     @id @default(autoincrement())
-  name            String
+  id   Int    @id @default(autoincrement())
+  name String
 
   @@map("positions")
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  user_id            String?
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
-
-  // Relations
-  user               User?    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id                String  @id @default(cuid())
+  user_id           String?
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User?   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([user_id], map: "accounts_user_id_fkey")
   @@map("accounts")
 }
